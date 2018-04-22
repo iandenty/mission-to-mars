@@ -5,7 +5,15 @@ class Map {
   }
 
   set mission(missionPath) {
-    this.missionPaths = [...this.missionPaths, ...missionPath];
+    const missionPaths = [...this.missionPaths];
+    const missionPathIndex = missionPaths.findIndex(path => Object.keys(path)[0] === Object.keys(missionPath)[0]);
+    
+    if(missionPathIndex !== -1){
+      missionPaths[missionPathIndex] = missionPath;
+      this.missionPaths = missionPaths;
+    } else {
+      this.missionPaths = [...missionPaths, ...missionPath];
+    }
   } 
 };
 

@@ -31,11 +31,14 @@ const missionsToMars = {
     this.robots = robots.map(robot => new Robot({...robot}));
     
     this.robots.forEach(robot => {
-      this.landRobot([{[robot.id]: robot.position}]);
+      this.landRobot([{[robot.id]: [[...robot.position]]}]);
+    });
 
+    this.robots.forEach(robot => {
       const instructions = robot.instructions.split('');
       instructions.forEach(instruction => this.instructRobot(robot, instruction.toUpperCase()));
     });
+
   },
 
   landRobot: function(mission) {
@@ -57,8 +60,25 @@ const missionsToMars = {
   },
 
   moveRobot: function(robot) {
-    robot.position = Robot.nextPosition(robot.position, robot.orientation);
+    const nextPosition = Robot.nextPosition(robot.position, robot.orientation);
+    robot.position = nextPosition;
+    
+    this.updatePath(robot, nextPosition);
+  },
+
+  updatePath: function(robot, nextPosition) {
+    const robotMission = [...this.map.missionPaths].filter(path => {
+      const missionId = Number(Object.keys(path)[0]);
+      return missionId === robot.id
+    });
+
+    const currentPath = robotMission[0][robot.id];
+    this.map.mission = {[robot.id]: [...currentPath, [...robot.position]]};
   }
 }
 
 missionsToMars.init(missions.extent, missions.robots);
+
+missionsToMars.robots.forEach(robot => {
+  console.log(robot.position, robot.orientation);
+});

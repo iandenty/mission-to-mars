@@ -46,7 +46,7 @@ const missionsToMars = {
     if(instruction === 'L' || instruction === 'R') {
       this.rotateRobot(robot, instruction);
     } else if (instruction === 'F') {
-      this.moveRobot(robot, instruction);
+      this.moveRobot(robot);
     }
   },
 
@@ -54,11 +54,10 @@ const missionsToMars = {
     const rotation = direction === 'R' ? 90: -90;
 
     robot.orientation = Robot.nextOrientation(robot.orientation, rotation);
-    console.log(robot.orientation)
   },
 
-  moveRobot: function(robot, movement) {
-    console.log('Move robot');
+  moveRobot: function(robot) {
+    robot.position = Robot.nextPosition(robot.position, robot.orientation);
   }
 }
 

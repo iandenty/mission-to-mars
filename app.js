@@ -32,13 +32,33 @@ const missionsToMars = {
     
     this.robots.forEach(robot => {
       this.landRobot([{[robot.id]: robot.position}]);
-    });
 
-    console.log(this.map.missionPaths)
+      const instructions = robot.instructions.split('');
+      instructions.forEach(instruction => this.instructRobot(robot, instruction.toUpperCase()));
+    });
   },
 
   landRobot: function(mission) {
     this.map.mission = mission;
+  },
+
+  instructRobot: function(robot, instruction) {
+    if(instruction === 'L' || instruction === 'R') {
+      this.rotateRobot(robot, instruction);
+    } else if (instruction === 'F') {
+      this.moveRobot(robot, instruction);
+    }
+  },
+
+  rotateRobot: function(robot, direction) {
+    const rotation = direction === 'R' ? 90: -90;
+
+    robot.orientation = Robot.nextOrientation(robot.orientation, rotation);
+    console.log(robot.orientation)
+  },
+
+  moveRobot: function(robot, movement) {
+    console.log('Move robot');
   }
 }
 

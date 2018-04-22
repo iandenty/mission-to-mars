@@ -4,8 +4,8 @@ class Map {
     this.missionPaths = [];
   }
 
-  set mission(mission) {
-    this.missionPaths = [...this.missionPaths, ...mission];
+  set mission(missionPath) {
+    this.missionPaths = [...this.missionPaths, ...missionPath];
   } 
 };
 

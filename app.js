@@ -83,7 +83,7 @@ const missionsToMarsControl = {
   updatePath: function(robot, nextPosition) {
     const robotMission = [...this.map.missionPaths].filter(path => {
       const missionId = Number(Object.keys(path)[0]);
-      return missionId === robot.id
+      return missionId === robot.id;
     });
 
     const currentPath = robotMission[0][robot.id];

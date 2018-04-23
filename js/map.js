@@ -14,7 +14,18 @@ class Map {
     } else {
       this.missionPaths = [...missionPaths, ...missionPath];
     }
-  } 
+  }
+
+  static isPointInBounds(point, extent) {
+    const x = point[0];
+    const y = point[1];
+
+    const isXValid = x >= 0 && x <= extent[0];
+    const isYValid = y >= 0 && y <= extent[1];
+
+    return isXValid || isYValid;
+  }
 };
 
-module.exports = Map;
+// module.exports = Map;
+export default Map;

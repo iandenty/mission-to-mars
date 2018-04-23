@@ -1,5 +1,5 @@
-const Map = require('./js/map.js');
-const Robot = require('./js/robot.js');
+import Map from './js/map.js';
+import Robot from './js/robot.js';
 
 const missions = {
   extent: [5, 3],
@@ -28,9 +28,10 @@ const missions = {
 const missionsToMars = {
   init: function(extent, robots) {
     this.map = new Map(extent);
-    this.robots = robots.map(robot => new Robot({...robot}));
+    this.robots = robots.map(robot => new Robot(robot.id, robot.landingPosition, robot.orientation, robot.instructions));
     
     this.robots.forEach(robot => {
+      this.validateRobotMove([...robot.position]);
       this.landRobot([{[robot.id]: [[...robot.position]]}]);
     });
 
@@ -38,7 +39,6 @@ const missionsToMars = {
       const instructions = robot.instructions.split('');
       instructions.forEach(instruction => this.instructRobot(robot, instruction.toUpperCase()));
     });
-
   },
 
   landRobot: function(mission) {
@@ -61,9 +61,16 @@ const missionsToMars = {
 
   moveRobot: function(robot) {
     const nextPosition = Robot.nextPosition(robot.position, robot.orientation);
-    robot.position = nextPosition;
+    robot.updatePosition = nextPosition;
     
+    const isInBounds = this.validateRobotMove(nextPosition);
+    if(!isInBounds) robot.isLost(!isInBounds);
+
     this.updatePath(robot, nextPosition);
+  },
+
+  validateRobotMove: function(position) {
+    return Map.isPointInBounds(position, this.map.extent);
   },
 
   updatePath: function(robot, nextPosition) {
@@ -81,4 +88,5 @@ missionsToMars.init(missions.extent, missions.robots);
 
 missionsToMars.robots.forEach(robot => {
   console.log(robot.position, robot.orientation);
+  if(robot.isLost) console.log(robot.isLost);
 });

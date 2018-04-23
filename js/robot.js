@@ -1,16 +1,17 @@
 class Robot {
-  constructor({id, landingPosition, orientation, instructions}) {
+  constructor(id, landingPosition, orientation, instructions) {
     this.id = id;
     this._position = landingPosition;
-    this._orientation = this.constructor.orientationInDegrees(orientation);
+    this._orientation = this.constructor.orientationToDegrees(orientation);
     this.instructions = instructions;
+    this._isLost = false;
   }
 
   get position() {
     return this._position;
   }
 
-  set postion(nextPosition) {
+  set updatePosition(nextPosition) {
     this._position = nextPosition;
   }
 
@@ -22,7 +23,15 @@ class Robot {
     this._orientation = nextPosition;
   }
 
-  static orientationInDegrees(orientation){
+  get isLost() {
+    return this._isLost;
+  }
+
+  set isLost(isLost) {
+    this._isLost = isLost;
+  }
+
+  static orientationToDegrees(orientation){
     const lookup = {
       N: 0,
       E: 90,
@@ -62,4 +71,5 @@ class Robot {
   }
 };
 
-module.exports = Robot;
+// module.exports = Robot;
+export default Robot;

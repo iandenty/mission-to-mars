@@ -1,7 +1,9 @@
+'use strict';
+
 import Map from './js/map.js';
 import Robot from './js/robot.js';
 
-const missions = {
+const missionsToMarsData = {
   extent: [5, 3],
   robots: [
     {
@@ -25,19 +27,23 @@ const missions = {
   ]
 };
 
-const missionsToMars = {
+const missionsToMarsControl = {
   init: function(extent, robots) {
     this.map = new Map(extent);
     this.robots = robots.map(robot => new Robot(robot.id, robot.landingPosition, robot.orientation, robot.instructions));
-    
+    missionsToMarsView.init(document.getElementById('mars'));
+
     this.robots.forEach(robot => {
       this.validateRobotMove([...robot.position]);
       this.landRobot([{[robot.id]: [[...robot.position]]}]);
-    });
 
-    this.robots.forEach(robot => {
+      missionsToMarsView.addRobotLanding(...robot.position);
+
       const instructions = robot.instructions.split('');
-      instructions.forEach(instruction => this.instructRobot(robot, instruction.toUpperCase()));
+      instructions.forEach((instruction, index) => {
+        this.instructRobot(robot, instruction.toUpperCase());
+        if ((instructions.length - 1) === index) missionsToMarsView.drawPath();
+      });
     });
   },
 
@@ -66,6 +72,7 @@ const missionsToMars = {
     const isInBounds = this.validateRobotMove(nextPosition);
     if(!isInBounds) robot.isLost(!isInBounds);
 
+    missionsToMarsView.addPathSegment(...robot.position);
     this.updatePath(robot, nextPosition);
   },
 
@@ -84,9 +91,37 @@ const missionsToMars = {
   }
 }
 
-missionsToMars.init(missions.extent, missions.robots);
+const missionsToMarsView = {
+  init: function(canvas) {
+    this.ratio = 100;
 
-missionsToMars.robots.forEach(robot => {
-  console.log(robot.position, robot.orientation);
-  if(robot.isLost) console.log(robot.isLost);
+    if(canvas.getContext) {
+      this.ctx = canvas.getContext('2d');
+      this.ctx.lineWidth = 10;
+      this.ctx.lineJoin = "round";
+      this.ctx.strokeStyle = "black";
+
+      this.ctx.transform(1, 0, 0, -1, 0, canvas.height)
+    }
+  },
+
+  addRobotLanding: function(x, y) {
+    this.ctx.beginPath();
+    this.ctx.moveTo(x * this.ratio, y * this.ratio);
+  },
+
+  addPathSegment: function(x, y) {
+    this.ctx.lineTo(x * this.ratio, y * this.ratio);
+  },
+
+  drawPath: function() {
+    this.ctx.stroke();
+  }
+};
+
+missionsToMarsControl.init(missionsToMarsData.extent, missionsToMarsData.robots);
+
+missionsToMarsControl.robots.forEach(robot => {
+  console.log(`Final position: ${robot.position}, Final orientation: ${robot.orientation}`);
+  if(robot.isLost) console.log('LOST');
 });

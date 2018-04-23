@@ -71,5 +71,4 @@ class Robot {
   }
 };
 
-// module.exports = Robot;
 export default Robot;

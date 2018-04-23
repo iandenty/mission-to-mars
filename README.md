@@ -18,4 +18,5 @@ and open `index.html` in your browser.
 - Use lost robots map mark to influence future robot instructions
 - Differentiate individual robot paths in the view
 - Animate robot paths
-- Refactor robot positon and rotation 
+- Refactor robot positon and rotation
+- Add server

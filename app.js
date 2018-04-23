@@ -70,7 +70,7 @@ const missionsToMarsControl = {
     robot.updatePosition = nextPosition;
     
     const isInBounds = this.validateRobotMove(nextPosition);
-    if(!isInBounds) robot.isLost(!isInBounds);
+    if(!isInBounds) robot.lost = !isInBounds;
 
     missionsToMarsView.addPathSegment(...robot.position);
     this.updatePath(robot, nextPosition);
@@ -123,5 +123,5 @@ missionsToMarsControl.init(missionsToMarsData.extent, missionsToMarsData.robots)
 
 missionsToMarsControl.robots.forEach(robot => {
   console.log(`Final position: ${robot.position}, Final orientation: ${robot.orientation}`);
-  if(robot.isLost) console.log('LOST');
+  if(robot.lost) console.log('LOST');
 });

@@ -23,11 +23,11 @@ class Robot {
     this._orientation = nextPosition;
   }
 
-  get isLost() {
+  get lost() {
     return this._isLost;
   }
 
-  set isLost(isLost) {
+  set lost(isLost) {
     this._isLost = isLost;
   }
 

@@ -23,7 +23,7 @@ class Map {
     const isXValid = x >= 0 && x <= extent[0];
     const isYValid = y >= 0 && y <= extent[1];
 
-    return isXValid || isYValid;
+    return isXValid && isYValid;
   }
 };
 
